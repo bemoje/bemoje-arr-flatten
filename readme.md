@@ -37,8 +37,11 @@ npm install --save-dev @bemoje/arr-flatten
 ```javascript
 import arrFlatten from '@bemoje/arr-flatten'
 
-arrFlatten()
-//=> undefined
+arrFlatten([1, [2]])
+//=> [1, 2]
+
+arrFlatten([1, [2, [3]]])
+//=> [1, 2, 3]
 
 ```
 
