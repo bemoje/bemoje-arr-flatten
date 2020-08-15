@@ -1,35 +1,30 @@
 (function (global, factory) {
-	typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('@bemoje/assert-args'), require('@bemoje/assert-type'), require('@bemoje/is-array')) :
-	typeof define === 'function' && define.amd ? define(['@bemoje/assert-args', '@bemoje/assert-type', '@bemoje/is-array'], factory) :
-	(global = global || self, global['arr-flatten'] = factory(global.assertArgs, global.assertType, global.isArray));
-}(this, (function (assertArgs, assertType, isArray) { 'use strict';
+	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
+	typeof define === 'function' && define.amd ? define(['exports'], factory) :
+	(global = global || self, factory(global['arr-flatten'] = {}));
+}(this, (function (exports) { 'use strict';
 
-	assertArgs = assertArgs && Object.prototype.hasOwnProperty.call(assertArgs, 'default') ? assertArgs['default'] : assertArgs;
-	assertType = assertType && Object.prototype.hasOwnProperty.call(assertType, 'default') ? assertType['default'] : assertType;
-	isArray = isArray && Object.prototype.hasOwnProperty.call(isArray, 'default') ? isArray['default'] : isArray;
+	const isArray = Array.isArray;
 
 	/**
 	 * Flattens the passed array recursively.
 	 * @param {Array} arr - the array to flatten
-	 * @returns {Array<any>}
+	 * @returns {Array<*>}
 	 */
 	function arrFlatten(arr) {
-		assertArgs(arr);
-		assertType(Array, arr);
-
-		function recurse(arr) {
-			return arr.reduce((accum, element, i) => {
-				if (isArray(element)) {
-					arrFlatten(element).forEach((value) => accum.push(value));
-				} else {
-					accum.push(element);
-				}
-				return accum
-			}, [])
-		}
-		return recurse(arr)
+		return arr.reduce((accum, elem) => {
+			if (isArray(elem)) {
+				accum.push(...arrFlatten(elem));
+			} else {
+				accum.push(elem);
+			}
+			return accum
+		}, [])
 	}
 
-	return arrFlatten;
+	exports.arrFlatten = arrFlatten;
+	exports.default = arrFlatten;
+
+	Object.defineProperty(exports, '__esModule', { value: true });
 
 })));
